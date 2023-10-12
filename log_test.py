@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 from scipy.signal import find_peaks
 import matplotlib.pyplot as plt
+
+#number of coefficients for the polynomial
+cof_num = 10
 def read_cgs(file_path):
     with open(file_path, "r") as file:
         lines = [line.strip() for line in file]
@@ -54,7 +57,7 @@ def load_data(data_path):
 def polyfit_to_peak(x,y):
 
   # Fit a polynomial to the data
-  coefficients = np.polyfit(x, y, 10)
+  coefficients = np.polyfit(x, y, cof_num)
   poly = np.poly1d(coefficients)
 
   # Evaluate the polynomial at x_values
