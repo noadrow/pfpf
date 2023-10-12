@@ -16,6 +16,11 @@ python3 log_test.py ./data/GSE87571_normalized_celltype.pickle ./data/GSE87571.n
 example of console output:
 ![image](https://github.com/noadrow/pfpf/assets/105928017/92074fa0-2870-4ef3-91fb-3f14f8faa368)
 
-
-
+### result examples
+1 peak:
+![image](https://github.com/noadrow/pfpf/blob/main/results_poly/cg00419321_1.png?raw=true)
+2 peaks:
+![image](https://github.com/noadrow/pfpf/blob/main/results_poly/cg00308130_2.png?raw=true)
+3 peaks:
+![image](https://github.com/noadrow/pfpf/blob/main/results_poly/cg01091514_3.png?raw=true)
 
