@@ -1,5 +1,5 @@
 # pfpf - poly fit & peak find 
-Fitting a polynomial with the polyfit function combined with peak detection using find_peak results in a precise method for recognizing multiple modes in your data
+Fitting a polynomial with the polyfit function combined with peak detection using find_peak results in a precise method for recognizing multiple modals in your dataset
 ## -input1: 
 dataset values (methylation table for example)
 ## -input2: 
