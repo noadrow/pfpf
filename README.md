@@ -7,7 +7,7 @@ CpG list (choose the rows from the table to work with)
 ## -input3: 
 number of coefficients to fit (the more coefficients the greater resolution, the grater the over_fit too though)
 
-# example of a usecae
+# An example of a use case
 ## GUI style
 ![GUI style example](https://github.com/noadrow/pfpf/blob/main/20231013000736.gif?raw=true)
 
@@ -15,10 +15,10 @@ number of coefficients to fit (the more coefficients the greater resolution, the
 ```
 python3 log_test.py ./data/GSE87571_normalized_celltype.pickle ./data/GSE87571.no_chrx.no_snp.txt 20 6
 ```
-example of console output:
+An example of a console output:
 ![image](https://github.com/noadrow/pfpf/assets/105928017/92074fa0-2870-4ef3-91fb-3f14f8faa368)
 
-## result examples
+## An example of results
 ### 1 peak:
 ![image](https://github.com/noadrow/pfpf/blob/main/results_poly/cg00419321_1.png?raw=true)
 ### 2 peaks:
