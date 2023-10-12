@@ -1,10 +1,9 @@
-import pandas as pd
-import numpy as np
+from pandas import DataFrame,read_pickle,read_csv,cut
+from numpy import arange, polyfit, poly1d
 from scipy.signal import find_peaks
 import matplotlib.pyplot as plt
+from time import time
 
-#number of coefficients for the polynomial
-cof_num = 10
 def read_cgs(file_path):
     with open(file_path, "r") as file:
         lines = [line.strip() for line in file]
@@ -15,19 +14,32 @@ def loading_file():
     if(len(sys.argv) > 1):
         INPUT_control = str(sys.argv[1])
         CPG_PATH = str(sys.argv[2])
+        # number of coefficients for the polynomial
+        cof_num = int(sys.argv[3])
+        # number of amplitude of a peak to be counted as a real gaussian peak
+        threshold = int(sys.argv[4])
     else:
         from tkinter import Tk
         from tkinter.filedialog import askopenfilename
+        from tkinter.simpledialog import askinteger
 
         Tk().withdraw()
+        print('waiting for dataset...')
         INPUT_control = askopenfilename(title='pick a pickle',filetypes=[("Pickles", "*.pickle")])
+        print('waiting for CpG list...')
         CPG_PATH = askopenfilename(title='pick a CpG list',filetypes=[("Text File", "*.txt")])
+        print('waiting for number of coefficients for the polynomial...')
+        cof_num = askinteger(title='coeff num',prompt='number of coefficients for the polynomial')
+        threshold = askinteger(title='threshold',prompt='threshold for amplitude to include the peak count')
 
-    df = pd.read_pickle(INPUT_control)
+    print('loading data...')
+    time0 = time()
+    df = read_pickle(INPUT_control)
     df.index = df.iloc[:,0]
     df = df.drop(df.columns[0], axis=1)
     CpG_list = read_cgs(CPG_PATH)
-    return [df,CpG_list]
+    print(f'finished loading data in {time()-time0} sec')
+    return [df,CpG_list,cof_num,threshold]
 
 def barplot_range_count(df, group, cgs):
     range_counts = []
@@ -35,8 +47,8 @@ def barplot_range_count(df, group, cgs):
         cg = cg.replace(" ", "")
         if (cg in df.index):
             working_df = df.loc[cg]
-            new_pd = pd.DataFrame({
-                'range': pd.cut(working_df, np.arange(0, 1, 0.01)),
+            new_pd = DataFrame({
+                'range': cut(working_df, arange(0, 1, 0.01)),
                 'val': working_df,
                 'index': working_df.index,
                 'counter': [1] * len(working_df)
@@ -47,7 +59,7 @@ def barplot_range_count(df, group, cgs):
 
 def load_data(data_path):
   #load data
-  data = pd.read_csv(data_path)
+  data = read_csv(data_path)
   # take axis from data
   x = data['range']
   y = data['counter']
@@ -57,8 +69,8 @@ def load_data(data_path):
 def polyfit_to_peak(x,y):
 
   # Fit a polynomial to the data
-  coefficients = np.polyfit(x, y, cof_num)
-  poly = np.poly1d(coefficients)
+  coefficients = polyfit(x, y, cof_num)
+  poly = poly1d(coefficients)
 
   # Evaluate the polynomial at x_values
   y_curve = poly(x)
@@ -87,7 +99,7 @@ def real_peaker(y_peak_values):
   counter = 0
   peak_vals = []
   for peak in y_peak_values:
-    if (peak>6):
+    if (peak>threshold):
       peak_vals.append(peak)
       counter = counter+1
 
@@ -97,11 +109,16 @@ def real_peaker(y_peak_values):
 
 if __name__ == '__main__':
 
-    df,CpG_list = loading_file()
+    df,CpG_list,cof_num,threshold = loading_file()
     #df_filt = df.loc[df.index.intersection(CpG_list)]
+    print('making pdfs...')
+    time0 = time()
     range_counts = barplot_range_count(df,'test1',CpG_list)
+    print(f'finished ordering to pdf in {time()-time0} sec')
+    time0 = time()
+    print('calc and plot results...')
     for count,cg in zip(range_counts,CpG_list):
-        data = pd.DataFrame({
+        data = DataFrame({
             'range': [l.mid for l in count.index],
             'counter': count.values
         })
@@ -111,3 +128,4 @@ if __name__ == '__main__':
         counter,peak_vals = real_peaker(y_peak_values)
         plot_everthing(x,y,y_curve,y_peak_values,peaks,cg,counter,peak_vals)
 
+    print(f'finished successfully in {time() - time0}')
