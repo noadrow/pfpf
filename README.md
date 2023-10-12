@@ -13,4 +13,9 @@ you can complie it using pyinstaller if you like to
 ```
 python3 log_test.py ./data/GSE87571_normalized_celltype.pickle ./data/GSE87571.no_chrx.no_snp.txt 20 6
 ```
+example of console output:
+![image](https://github.com/noadrow/pfpf/assets/105928017/92074fa0-2870-4ef3-91fb-3f14f8faa368)
+
+
+
 
