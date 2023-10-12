@@ -1,8 +1,11 @@
 # pfpf - poly fit & peak find 
 Fitting a polynomial with the polyfit function combined with peak detection using find_peak results in a precise method for recognizing multiple modes in your data
--input1: dataset values (methylation table for example)
--input2: CpG list (choose the rows from the table to work with)
--input3: number of coefficients to fit (the more coefficients the greater resolution, the grater the over_fit too though)
+## -input1: 
+dataset values (methylation table for example)
+## -input2: 
+CpG list (choose the rows from the table to work with)
+## -input3: 
+number of coefficients to fit (the more coefficients the greater resolution, the grater the over_fit too though)
 
 # example of a usecae
 ## GUI style
