@@ -7,6 +7,7 @@ you can complie it using pyinstaller if you like to
 
 ## example of a usecae
 ### GUI style
+![GUI style example](https://github.com/noadrow/pfpf/blob/main/20231013000736.gif?raw=true)
 
 ### command line style
 ```
