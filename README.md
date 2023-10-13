@@ -27,6 +27,7 @@ An example of -h\--help use
 python3 --help
 ```
 An example of a console output:
+![image](https://github.com/noadrow/pfpf/assets/105928017/4d5fd378-8193-4355-b9ab-518e248f2e19)
 
 ## An example of results
 ### 1 peak:
