@@ -12,6 +12,7 @@ number of coefficients to fit (the more coefficients the greater resolution, the
 ### An example of running with plotting results
 ![GUI style example](https://github.com/noadrow/pfpf/blob/main/20231013000736.gif?raw=true)
 ### An example of using just for fillteration (CpG filtered list)
+![no_plotting](https://github.com/noadrow/pfpf/assets/105928017/147efd62-e23c-4fdd-809a-393846bdb612)
 
 ## command line style
 ### An example of running with plotting results
@@ -38,4 +39,8 @@ python3 --help
 ![image](https://github.com/noadrow/pfpf/blob/main/results_poly/cg00308130_2.png?raw=true)
 ### 3 peaks:
 ![image](https://github.com/noadrow/pfpf/blob/main/results_poly/cg01091514_3.png?raw=true)
+
+
+# set_difference
+simple bash script to use
 
