@@ -4,6 +4,8 @@ from scipy.signal import find_peaks
 import matplotlib.pyplot as plt
 from time import time
 
+plotting = False
+
 def read_cgs(file_path):
     with open(file_path, "r") as file:
         lines = [line.strip() for line in file]
@@ -18,10 +20,13 @@ def loading_file():
         cof_num = int(sys.argv[3])
         # number of amplitude of a peak to be counted as a real gaussian peak
         threshold = int(sys.argv[4])
+        group = int(sys.argv[5])
     else:
         from tkinter import Tk
         from tkinter.filedialog import askopenfilename
         from tkinter.simpledialog import askinteger
+        from tkinter.simpledialog import askstring
+        from tkinter.messagebox import askyesno
 
         Tk().withdraw()
         print('waiting for dataset...')
@@ -31,6 +36,8 @@ def loading_file():
         print('waiting for number of coefficients for the polynomial...')
         cof_num = askinteger(title='coeff num',prompt='number of coefficients for the polynomial')
         threshold = askinteger(title='threshold',prompt='threshold for amplitude to include the peak count')
+        group = askstring(title='experiment name',prompt='name the experiment')
+        plotting = askyesno(title='do you want to plot? (yes) or save counting (no)', message=None)
 
     print('loading data...')
     time0 = time()
@@ -39,7 +46,7 @@ def loading_file():
     df = df.drop(df.columns[0], axis=1)
     CpG_list = read_cgs(CPG_PATH)
     print(f'finished loading data in {time()-time0} sec')
-    return [df,CpG_list,cof_num,threshold]
+    return [df,CpG_list,cof_num,threshold,group,plotting]
 
 def barplot_range_count(df, group, cgs):
     range_counts = []
@@ -102,18 +109,19 @@ def real_peaker(y_peak_values):
     if (peak>threshold):
       peak_vals.append(peak)
       counter = counter+1
+      peak_state = True
 
   return [counter,peak_vals]
 
 
 
 if __name__ == '__main__':
-
-    df,CpG_list,cof_num,threshold = loading_file()
+    cgs = []
+    df,CpG_list,cof_num,threshold,group,plotting = loading_file()
     #df_filt = df.loc[df.index.intersection(CpG_list)]
     print('making pdfs...')
     time0 = time()
-    range_counts = barplot_range_count(df,'test1',CpG_list)
+    range_counts = barplot_range_count(df,group,CpG_list)
     print(f'finished ordering to pdf in {time()-time0} sec')
     time0 = time()
     print('calc and plot results...')
@@ -126,6 +134,14 @@ if __name__ == '__main__':
         x, y = data['range'],data['counter']
         x, y, y_curve, y_peak_values, peaks = polyfit_to_peak(x, y)
         counter,peak_vals = real_peaker(y_peak_values)
-        plot_everthing(x,y,y_curve,y_peak_values,peaks,cg,counter,peak_vals)
+        if(counter>1):
+            cgs.append(cg)
+
+        if plotting:
+            plot_everthing(x,y,y_curve,y_peak_values,peaks,cg,counter,peak_vals)
+
+    if not plotting:
+        with open(f"./results_poly/{group}.txt", 'w') as f:
+            f.write("\n".join(map(str, cgs)))
 
     print(f'finished successfully in {time() - time0}')
