@@ -21,12 +21,12 @@ def loading_file():
         cof_num = int(sys.argv[3])
         # number of amplitude of a peak to be counted as a real gaussian peak
         threshold = int(sys.argv[4])
-        group = int(sys.argv[5])
-        parser = argparse.ArgumentParser(description="Boolean argument example")
-        # Add a boolean argument named --plot
-        parser.add_argument("--plot", action="store_true", help="Set this flag to True")
-        args = parser.parse_args()
-        plotting = args.flag
+        group = str(sys.argv[5])
+        plotting = False
+
+        if (len(sys.argv) > 6):
+            plotting = True
+
 
     else:
         from tkinter import Tk
@@ -131,9 +131,7 @@ if __name__ == '__main__':
                 -arg3 = coefficient numebr for polyfit
                 -arg4 = threashold for peak detection
                 -arg5 = name the experiment
-                * optional
-                --plot plot result, if empty then 
-                 the function returns filtered CpG list only.
+                --plot = for plotting results, empty for filtered CpG list only
         ''')
     else:
         cgs = []
@@ -165,3 +163,5 @@ if __name__ == '__main__':
                 f.write("\n".join(map(str, cgs)))
 
         print(f'finished successfully in {time() - time0}')
+
+
