@@ -12,11 +12,21 @@ number of coefficients to fit (the more coefficients the greater resolution, the
 ![GUI style example](https://github.com/noadrow/pfpf/blob/main/20231013000736.gif?raw=true)
 
 ## command line style
+An example of running with plotting results
 ```
-python3 log_test.py ./data/GSE87571_normalized_celltype.pickle ./data/GSE87571.no_chrx.no_snp.txt 20 6
+python3 log_test.py ./data/GSE87571_normalized_celltype.pickle ./data/GSE87571.no_chrx.no_snp.txt 20 6 "test1" --plot 
+```
+An example of using just for fillteration (CpG filtered list)
+```
+python3 log_test.py ./data/GSE87571_normalized_celltype.pickle ./data/GSE87571.no_chrx.no_snp.txt 20 6 "test1" 
 ```
 An example of a console output:
 ![image](https://github.com/noadrow/pfpf/assets/105928017/92074fa0-2870-4ef3-91fb-3f14f8faa368)
+An example of -h\--help use
+```
+python3 --help
+```
+An example of a console output:
 
 ## An example of results
 ### 1 peak:
