@@ -3,6 +3,7 @@ from numpy import arange, polyfit, poly1d
 from scipy.signal import find_peaks
 import matplotlib.pyplot as plt
 from time import time
+import sys
 
 plotting = False
 
@@ -12,7 +13,7 @@ def read_cgs(file_path):
     return lines
 
 def loading_file():
-    import sys
+    import argparse
     if(len(sys.argv) > 1):
         INPUT_control = str(sys.argv[1])
         CPG_PATH = str(sys.argv[2])
@@ -21,6 +22,12 @@ def loading_file():
         # number of amplitude of a peak to be counted as a real gaussian peak
         threshold = int(sys.argv[4])
         group = int(sys.argv[5])
+        parser = argparse.ArgumentParser(description="Boolean argument example")
+        # Add a boolean argument named --plot
+        parser.add_argument("--plot", action="store_true", help="Set this flag to True")
+        args = parser.parse_args()
+        plotting = args.flag
+
     else:
         from tkinter import Tk
         from tkinter.filedialog import askopenfilename
@@ -116,32 +123,45 @@ def real_peaker(y_peak_values):
 
 
 if __name__ == '__main__':
-    cgs = []
-    df,CpG_list,cof_num,threshold,group,plotting = loading_file()
-    #df_filt = df.loc[df.index.intersection(CpG_list)]
-    print('making pdfs...')
-    time0 = time()
-    range_counts = barplot_range_count(df,group,CpG_list)
-    print(f'finished ordering to pdf in {time()-time0} sec')
-    time0 = time()
-    print('calc and plot results...')
-    for count,cg in zip(range_counts,CpG_list):
-        data = DataFrame({
-            'range': [l.mid for l in count.index],
-            'counter': count.values
-        })
+    if "--help" in sys.argv or "-h" in sys.argv:
 
-        x, y = data['range'],data['counter']
-        x, y, y_curve, y_peak_values, peaks = polyfit_to_peak(x, y)
-        counter,peak_vals = real_peaker(y_peak_values)
-        if(counter>1):
-            cgs.append(cg)
+        print('''
+                -arge1 = dataset
+                -arg2 = CpG list
+                -arg3 = coefficient numebr for polyfit
+                -arg4 = threashold for peak detection
+                -arg5 = name the experiment
+                * optional
+                --plot plot result, if empty then 
+                 the function returns filtered CpG list only.
+        ''')
+    else:
+        cgs = []
+        df,CpG_list,cof_num,threshold,group,plotting = loading_file()
+        #df_filt = df.loc[df.index.intersection(CpG_list)]
+        print('making pdfs...')
+        time0 = time()
+        range_counts = barplot_range_count(df,group,CpG_list)
+        print(f'finished ordering to pdf in {time()-time0} sec')
+        time0 = time()
+        print('calc and plot results...')
+        for count,cg in zip(range_counts,CpG_list):
+            data = DataFrame({
+                'range': [l.mid for l in count.index],
+                'counter': count.values
+            })
 
-        if plotting:
-            plot_everthing(x,y,y_curve,y_peak_values,peaks,cg,counter,peak_vals)
+            x, y = data['range'],data['counter']
+            x, y, y_curve, y_peak_values, peaks = polyfit_to_peak(x, y)
+            counter,peak_vals = real_peaker(y_peak_values)
+            if(counter>1):
+                cgs.append(cg)
 
-    if not plotting:
-        with open(f"./results_poly/{group}.txt", 'w') as f:
-            f.write("\n".join(map(str, cgs)))
+            if plotting:
+                plot_everthing(x,y,y_curve,y_peak_values,peaks,cg,counter,peak_vals)
 
-    print(f'finished successfully in {time() - time0}')
+        if not plotting:
+            with open(f"./results_poly/{group}.txt", 'w') as f:
+                f.write("\n".join(map(str, cgs)))
+
+        print(f'finished successfully in {time() - time0}')
